@@ -2,9 +2,7 @@ name: Sync DeepSeek Harness Upstream
 
 on:
   schedule:
-    # UTC 00:00 对应北京时间每天早上 08:00
     - cron: '0 0 * * *'
-  # 允许在 Actions 页面手动点击按钮立即测试同步
   workflow_dispatch:
 
 permissions:
@@ -14,6 +12,11 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
       - name: Sync master from deepseek-ai/deepseek-harness
         uses: repo-sync/github-sync@v2
         with:
