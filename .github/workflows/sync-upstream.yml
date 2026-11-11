@@ -24,3 +24,22 @@ jobs:
           source_branch: "master"
           destination_branch: "master"
           github_token: ${{ secrets.PAT_TOKEN }}
+
+      - name: 失败邮件通知
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.qq.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USER }}
+          password: ${{ secrets.MAIL_PASS }}
+          to: ${{ secrets.MAIL_TO }}
+          from: ${{ secrets.MAIL_USER }}
+          subject: "⚠️ 上游同步任务失败"
+          body: |
+            同步Workflow：Sync DeepSeek Harness Upstream
+            仓库：${{ github.repository }}
+            分支：master
+            执行人：${{ github.actor }}
+            运行链接：${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
